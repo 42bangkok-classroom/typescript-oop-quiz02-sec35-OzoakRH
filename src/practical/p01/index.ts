@@ -12,23 +12,26 @@ interface EdgePost {
   title: string;
 }
 
-async function getEdgePosts(): Promise<EdgePost[]> {
-  const url = 'https://jsonplaceholder.typicode.com/posts';
-
+export async function getEdgePosts(): Promise<EdgePost[]> {
   try {
-    const response = await axios.get<Post[]>(url);
-    const data = response.data;
+    const response = await axios.get<Post[]>('https://jsonplaceholder.typicode.com/posts');
+    const posts = response.data;
 
-    if (data.length === 0) return [];
-    
-    const firstPost = data[0];
-    const lastPost = data[data.length - 1];
+ 
+    if (posts.length === 0) {
+      return [];
+    }
 
-    return [firstPost, lastPost].map(({ id, title }) => ({
-      id,
-      title,
+    const firstPost = posts[0];
+    const lastPost = posts[posts.length - 1];
+
+    const result: EdgePost[] = [firstPost, lastPost].map((post) => ({
+      id: post.id,
+      title: post.title,
     }));
+
+    return result;
   } catch (error) {
-    throw new Error('Failed to fetch posts');
+    return [];
   }
 }
