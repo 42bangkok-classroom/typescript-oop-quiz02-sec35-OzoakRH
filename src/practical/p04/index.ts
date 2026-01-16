@@ -8,7 +8,7 @@ interface Comment {
   body: string;
 }
 
-async function countCommentsByPost(): Promise<{ [key: number]: number }> {
+export async function countCommentsByPost(): Promise<{ [key: number]: number }> {
   try {
     const response = await axios.get<Comment[]>('https://jsonplaceholder.typicode.com/comments');
     const comments = response.data;
@@ -17,7 +17,7 @@ async function countCommentsByPost(): Promise<{ [key: number]: number }> {
       return {};
     }
 
-    const result = comments.reduce((acc: { [key: number]: number }, comment) => {
+    const result = comments.reduce((acc: { [key: number]: number }, comment: Comment) => {
       const postId = comment.postId;
 
       if (postId !== null && postId !== undefined) {
